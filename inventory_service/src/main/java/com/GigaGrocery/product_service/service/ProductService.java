@@ -1,5 +1,6 @@
 package com.GigaGrocery.product_service.service;
 
+import com.GigaGrocery.product_service.dto.Image;
 import com.GigaGrocery.product_service.dto.ProductRequest;
 import com.GigaGrocery.product_service.dto.ProductResponse;
 import com.GigaGrocery.product_service.model.Product;
@@ -8,6 +9,7 @@ import com.GigaGrocery.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -22,7 +24,10 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final List< Stock > stocks;
 
+    private RestTemplate restTemplate;
+
     public void createProduct(ProductRequest productRequest) {
+        log.info("Product name {}, image {}", productRequest.getName(), productRequest.getImage());
         try {
             if (productRepository.existsByName(productRequest.getName())) {
                 log.error("Product with name {} already exists", productRequest.getName());
@@ -31,6 +36,17 @@ public class ProductService {
         } catch (Exception e) {
             log.error("Product with name {} already exists", productRequest.getName());
         }
+
+        try {
+            String url = "https://api.imgbb.com/1/upload";
+            String key = "668f3a2d69cc2a8558c90ce108813b21";
+            String base64EncodedImage = productRequest.getImage();
+            String response = restTemplate.postForObject(url, new Image(key, base64EncodedImage), String.class);
+            log.info(response);
+        } catch (Exception e) {
+            log.error("Error while uploading the image to the server.");
+        }
+
         try {
             Product product = Product.builder()
                     .name(productRequest.getName())
