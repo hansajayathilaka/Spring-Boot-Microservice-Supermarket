@@ -1,6 +1,6 @@
-package com.example.order.repository;
+package com.ead.order.repository;
 
-import com.example.order.model.Order;
+import com.ead.order.model.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

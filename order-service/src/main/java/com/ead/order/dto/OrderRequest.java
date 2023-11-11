@@ -1,6 +1,6 @@
-package com.example.order.dto;
+package com.ead.order.dto;
 
-import com.example.order.model.OrderQuantity;
+import com.ead.order.model.OrderQuantity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

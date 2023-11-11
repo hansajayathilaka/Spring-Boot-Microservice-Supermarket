@@ -1,18 +1,15 @@
-package com.example.order.controller;
+package com.ead.order.controller;
 
-import com.example.order.dto.*;
-import com.example.order.model.Order;
-import com.example.order.service.OrderService;
-import jakarta.websocket.server.PathParam;
+import com.ead.order.dto.*;
+import com.ead.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("api/order")
+@RequestMapping("api/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;

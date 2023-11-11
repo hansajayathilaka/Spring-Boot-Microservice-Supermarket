@@ -1,4 +1,4 @@
-package com.example.order.model;
+package com.ead.order.model;
 
 public enum OrderStatus {
     IN_PROGRESS,
