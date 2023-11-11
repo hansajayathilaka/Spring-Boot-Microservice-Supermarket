@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -16,5 +14,5 @@ import java.time.LocalDateTime;
 public class Stock {
     private LocalDateTime date;
     private int quantity;
-    private BigDecimal price;
+    private float price;
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /***
@@ -24,5 +23,6 @@ public class Product {
     private String id;
     private String name;
     private String description;
+    private String category;
     private List<Stock> stocks;
 }

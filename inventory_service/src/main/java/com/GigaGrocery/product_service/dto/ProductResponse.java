@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-
-import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -15,5 +12,6 @@ import java.math.BigDecimal;
 public class ProductResponse {
     private String id;
     private String name;
+    private String category;
     private String description;
 }

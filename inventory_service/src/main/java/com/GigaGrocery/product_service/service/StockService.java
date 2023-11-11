@@ -7,6 +7,7 @@ import com.GigaGrocery.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.Optional;
 @Slf4j
 public class StockService {
     private final ProductRepository productRepository;
+
+    private RestTemplate restTemplate;
 
     public void createStock(String productID, StockRequest stockRequest) {
         try {
@@ -39,7 +42,6 @@ public class StockService {
             log.error(e.getMessage());
         }
     }
-
 
     public void updateStock(String productId, String stockId, StockRequest stockRequest) {
         try {
@@ -69,8 +71,6 @@ public class StockService {
             log.error(e.getMessage());
         }
     }
-
-
 
     public List<Stock> getStock(String productId) {
         try {

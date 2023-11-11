@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /***
- * Provide business logic and act as a intermediary layer in controller and repository
+ * Provide business logic and act as an intermediary layer in controller and repository
  */
 
 @Service
@@ -35,6 +35,7 @@ public class ProductService {
             Product product = Product.builder()
                     .name(productRequest.getName())
                     .description(productRequest.getDescription())
+                    .category(productRequest.getCategory())
                     .stocks(stocks)
                     .build();
             productRepository.save(product);
@@ -90,6 +91,7 @@ public class ProductService {
                     .id(productInDb.getId())
                     .name(productRequest.getName())
                     .description(productRequest.getDescription())
+                    .category(productRequest.getCategory())
                     .stocks(productInDb.getStocks())
                     .build();
             productRepository.save(product);

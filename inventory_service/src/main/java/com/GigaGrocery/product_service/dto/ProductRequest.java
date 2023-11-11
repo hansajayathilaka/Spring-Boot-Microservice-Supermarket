@@ -5,17 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-/***
- * Reason for using two different classes for product request and response is that the attributes
- * are different in these two classes.
- *
- * Instead of ProductResponse class we can use Product class also, but as a good practice we
- * implement separate two classes for Product Request and Response.
- */
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -23,4 +12,5 @@ import java.util.List;
 public class ProductRequest {
     private String name;
     private String description;
+    private String category;
 }
