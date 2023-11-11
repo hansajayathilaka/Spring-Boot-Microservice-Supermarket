@@ -68,6 +68,7 @@ public class ProductService {
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
+                .stocks(product.getStocks())
                 .build();
     }
 
