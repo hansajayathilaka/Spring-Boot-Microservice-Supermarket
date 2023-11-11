@@ -1,4 +1,4 @@
-package com.example.order.dto;
+package com.ead.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.example.order.model;
+package com.ead.order.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

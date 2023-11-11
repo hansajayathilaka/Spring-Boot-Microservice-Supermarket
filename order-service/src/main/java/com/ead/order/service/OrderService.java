@@ -1,20 +1,26 @@
-package com.example.order.service;
+package com.ead.order.service;
 
-import com.example.order.dto.*;
-import com.example.order.model.Order;
-import com.example.order.model.OrderStatus;
-import com.example.order.repository.OrderRepository;
+import com.ead.order.dto.*;
+import com.ead.order.model.Order;
+import com.ead.order.model.OrderQuantity;
+import com.ead.order.model.OrderStatus;
+import com.ead.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final WebClient.Builder loadBalancedWebClientBuilder;
 
     public String createOrder(OrderRequest orderRequest){
         Order order = Order.builder()
@@ -23,6 +29,12 @@ public class OrderService {
                 .customerId(orderRequest.getCustomerId())
                 .orderQuantity(orderRequest.getOrderQuantity())
                 .build();
+
+        for(OrderQuantity orderQuantity : orderRequest.getOrderQuantity()){
+            loadBalancedWebClientBuilder.build().delete()
+                    .uri(String.format("http://inventory-service/api/stock/%s/%s", orderQuantity.getStockId(), orderQuantity.getQuantity()))
+                    .retrieve();
+        }
 
         orderRepository.save(order);
         System.out.println(order);
@@ -55,11 +67,11 @@ public class OrderService {
         orderRepository.save(order);
     }
     public List<OrderListResponse> getOrderList(){
-        return orderRepository.findAll().stream().map(this::mapToOrderListResponse).toList();
+        return orderRepository.findAll().stream().map(this::mapToOrderListResponse).collect(Collectors.toList());
     }
 
     public List<CustomerOrderListResponse> getCustomerOrderList(String customerId){
-        return orderRepository.findByCustomerId(customerId).stream().map(this::mapToCustomerOrderListResponse).toList();
+        return orderRepository.findByCustomerId(customerId).stream().map(this::mapToCustomerOrderListResponse).collect(Collectors.toList());
     }
 
     private CustomerOrderListResponse mapToCustomerOrderListResponse(Order order){

@@ -7,6 +7,10 @@
 		<module>api-gateway</module>
 		<module>discovery-server</module>
 		<module>delivery-service</module>
+		<module>inventory-service</module>
+		<module>order-service</module>
+		<module>user-service</module>
+		<module>auth-service</module>
 	</modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
