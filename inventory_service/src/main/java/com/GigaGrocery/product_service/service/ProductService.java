@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductService {
-
     private final ProductRepository productRepository;
     private final List< Stock > stocks;
 
