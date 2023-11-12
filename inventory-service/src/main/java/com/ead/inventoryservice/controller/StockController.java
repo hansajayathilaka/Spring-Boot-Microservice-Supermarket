@@ -1,5 +1,6 @@
 package com.ead.inventoryservice.controller;
 
+import com.ead.inventoryservice.dto.PriceRequest;
 import com.ead.inventoryservice.dto.StockRequest;
 import com.ead.inventoryservice.model.Stock;
 import com.ead.inventoryservice.service.StockService;
@@ -86,6 +87,12 @@ public class StockController {
     @ResponseStatus(HttpStatus.OK)
     public void reduceStock(@PathVariable String productId, @PathVariable int itemCount) {
         stockService.reduceStock(productId, itemCount);
+    }
+
+    @GetMapping("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getStock(@PathVariable List<PriceRequest> productId) {
+        return stockService.getStockPrices(productId);
     }
 
 }
