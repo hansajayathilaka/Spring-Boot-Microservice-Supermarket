@@ -1,5 +1,6 @@
 package com.ead.inventoryservice.service;
 
+import com.ead.inventoryservice.dto.PriceRequest;
 import com.ead.inventoryservice.dto.StockRequest;
 import com.ead.inventoryservice.model.Product;
 import com.ead.inventoryservice.model.Stock;
@@ -88,6 +89,36 @@ public class StockService {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * When giving the product_id and the stock_id, this method will return a price list of all the products
+     * @param priceRequests
+     * @return
+     */
+    public List<String> getStockPrices(List<PriceRequest> priceRequests) {
+        try {
+            for (PriceRequest priceRequest : priceRequests) {
+                if (productRepository.existsById(priceRequest.getProductId())) {
+                    Optional<Product> product = productRepository.findById(priceRequest.getProductId());
+                    List<Stock> stocks = product.get().getStocks();
+                    if (stocks.size() == 0) {
+                        throw new RuntimeException("There are no any stocks in this product");
+                    }
+                    List<String> priceList = null;
+                    for (Stock stock : stocks) {
+                        priceList.add(stock.getPrice().toString());
+                    }
+                    return priceList;
+                } else {
+                    throw new RuntimeException("Product does not exist");
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+        return null;
     }
 
     public Stock getStock(String productId, String stockId) {
