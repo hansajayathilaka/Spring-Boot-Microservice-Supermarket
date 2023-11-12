@@ -32,10 +32,12 @@ public class ProductService {
         } catch (Exception e) {
             log.error("Product with name {} already exists", productRequest.getName());
         }
+
         try {
             Product product = Product.builder()
                     .name(productRequest.getName())
                     .description(productRequest.getDescription())
+                    .category(productRequest.getCategory())
                     .stocks(stocks)
                     .build();
             productRepository.save(product);
@@ -67,6 +69,7 @@ public class ProductService {
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
+                .category(product.getCategory())
                 .description(product.getDescription())
                 .build();
     }
@@ -91,6 +94,7 @@ public class ProductService {
                     .id(productInDb.getId())
                     .name(productRequest.getName())
                     .description(productRequest.getDescription())
+                    .category(productRequest.getCategory())
                     .stocks(productInDb.getStocks())
                     .build();
             productRepository.save(product);
