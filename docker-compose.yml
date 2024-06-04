@@ -14,11 +14,12 @@ services:
     build:
       context: ./api-gateway/
     environment:
+      - server.port=80
       - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
     ports:
-      - "4040:8080"
+      - "8080:80"
     expose:
-      - "4040"
+      - "80"
     depends_on:
       - discovery-server
 
@@ -27,6 +28,7 @@ services:
     build:
       context: ./delivery-service/
     environment:
+      - server.port=80
       - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
       - spring.data.mongodb.host=mongo-deliveryservice
       - spring.data.mongodb.port=27017
@@ -34,12 +36,75 @@ services:
       - spring.kafka.bootstrap-servers=kafka:29092
       - spring.kafka.consumer.group-id=delivery-id
     ports:
-      - "4043:4043"
+      - "8081:80"
     expose:
-      - "4043"
+      - "80"
     depends_on:
       - discovery-server
       - mongo-deliveryservice
+      - kafka
+
+  inventory-service:
+    container_name: inventory-service
+    build:
+      context: ./inventory-service/
+    environment:
+      - server.port=80
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
+      - spring.data.mongodb.host=mongo-inventoryservice
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=inventory-db
+      - spring.kafka.bootstrap-servers=kafka:29092
+      - spring.kafka.consumer.group-id=inventory-id
+    ports:
+      - "8082:80"
+    expose:
+      - "80"
+    depends_on:
+      - discovery-server
+      - mongo-inventoryservice
+      - kafka
+
+  order-service:
+    container_name: order-service
+    build:
+      context: ./order-service/
+    environment:
+      - server.port=80
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
+      - spring.data.mongodb.host=mongo-orderservice
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=order-db
+      - spring.kafka.bootstrap-servers=kafka:29092
+      - spring.kafka.consumer.group-id=order-id
+    ports:
+      - "8083:80"
+    expose:
+      - "80"
+    depends_on:
+      - discovery-server
+      - mongo-orderservice
+      - kafka
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service/
+    environment:
+      - server.port=80
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka
+      - spring.data.mongodb.host=mongo-userservice
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=user-db
+      - spring.kafka.bootstrap-servers=kafka:29092
+      - spring.kafka.consumer.group-id=user-id
+    ports:
+      - "8084:80"
+    expose:
+      - "80"
+    depends_on:
+      - discovery-server
+      - mongo-userservice
       - kafka
 
 
@@ -55,10 +120,9 @@ services:
     volumes:
       - ./data/postgres-authservice:/data/postgres
     expose:
-      - "5431"
+      - "5432"
     ports:
-      - "5431:5431"
-    command: -p 5431
+      - "5431:5432"
     restart: unless-stopped
 
   mongo-deliveryservice:
@@ -66,11 +130,44 @@ services:
     image: mongo:latest
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     expose:
       - "27017"
     volumes:
       - ./data/mongo-deliveryservice:/data/db
+
+  mongo-inventoryservice:
+    container_name: mongo-inventoryservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-inventoryservice:/data/db
+
+  mongo-orderservice:
+    container_name: mongo-orderservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-orderservice:/data/db
+
+  mongo-userservice:
+    container_name: mongo-userservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27021:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-userservice:/data/db
 
   zookeeper:
     image: zookeeper:3.7.0

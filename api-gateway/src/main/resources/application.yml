@@ -3,7 +3,7 @@ logging:
     org:
       springframework:
         cloud:
-          gateway: DEBUG
+          gateway: INFO
     reactor:
       netty:
         http:
@@ -22,10 +22,64 @@ spring:
         predicates:
           - Path=/api/deliveries/**
         filters:
+          - AuthFilter
           - name: CircuitBreaker
             args:
-              name: delivery
+              name: circuit-breaker
               fallbackUri: forward:/fallbacks/delivery
+
+      - id: inventory-service-products
+        uri: lb://inventory-service
+        predicates:
+          - Path=/api/products/**
+        filters:
+          - AuthFilter
+          - name: CircuitBreaker
+            args:
+              name: circuit-breaker
+              fallbackUri: forward:/fallbacks/products
+      - id: inventory-service-stocks
+        uri: lb://inventory-service
+        predicates:
+          - Path=/api/stocks/**
+        filters:
+          - AuthFilter
+          - name: CircuitBreaker
+            args:
+              name: circuit-breaker
+              fallbackUri: forward:/fallbacks/stocks
+
+      - id: order-service
+        uri: lb://order-service
+        predicates:
+          - Path=/api/orders/**
+        filters:
+          - AuthFilter
+          - name: CircuitBreaker
+            args:
+              name: circuit-breaker
+              fallbackUri: forward:/fallbacks/orders
+
+      - id: user-service
+        uri: lb://user-service
+        predicates:
+          - Path=/api/users/**,/api/customers/**,/api/employees/**
+        filters:
+          - AuthFilter
+          - name: CircuitBreaker
+            args:
+              name: circuit-breaker
+              fallbackUri: forward:/fallbacks/users
+
+      - id: auth-service
+        uri: lb://auth-service
+        predicates:
+          - Path=/api/auth/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: circuit-breaker
+              fallbackUri: forward:/fallbacks/users
 
 
 
@@ -45,10 +99,12 @@ management:
   endpoint:
     health:
       show-details: always
+    gateway:
+      enabled: true
 
 resilience4j.circuitbreaker:
   instances:
-    delivery:
+    circuit-breaker:
       registerHealthIndicator: true
       event-consumer-buffer-size: 10
       slidingWindowSize: 5
@@ -57,3 +113,7 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 5s
       permittedNumberOfCallsInHalfOpenState: 3
       automaticTransitionFromOpenToHalfOpenEnabled: true
+
+debug:
+    enabled: true
+    no-auth: true

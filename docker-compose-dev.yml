@@ -12,23 +12,54 @@ services:
     volumes:
       - ./data/postgres-authservice:/data/postgres
     expose:
-      - "5431"
+      - "5432"
     ports:
-      - "5431:5431"
-    command: -p 5431
+      - "5431:5432"
     restart: unless-stopped
-
 
   mongo-deliveryservice:
     container_name: mongo-deliveryservice
     image: mongo:latest
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     expose:
       - "27017"
     volumes:
       - ./data/mongo-deliveryservice:/data/db
+
+  mongo-inventoryservice:
+    container_name: mongo-inventoryservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-inventoryservice:/data/db
+
+  mongo-orderservice:
+    container_name: mongo-orderservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-orderservice:/data/db
+
+  mongo-userservice:
+    container_name: mongo-userservice
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27021:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./data/mongo-userservice:/data/db
 
   zookeeper:
     image: zookeeper:3.7.0
